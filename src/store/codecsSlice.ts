@@ -11,7 +11,7 @@ const codecsSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder.addCase(fetchCodecList.fulfilled, (state, action) => {
-      codecsAdapter.addMany(state, action.payload);
+      codecsAdapter.setAll(state, action.payload);
     });
   },
 });

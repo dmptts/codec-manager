@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import {
   createColumnHelper,
   flexRender,
@@ -12,14 +12,16 @@ import { useAppDispatch } from '../hooks/useAppDispatch';
 import { useAppSelector } from '../hooks/useAppSelector';
 import { codecsSelectors } from '../store/codecsSlice';
 import { ICodec } from '../types/codec';
+import Pagination from './Pagination';
 
 export default function CodecListPage() {
   const dispatch = useAppDispatch();
   const codecs = useAppSelector(codecsSelectors.selectAll);
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    dispatch(fetchCodecList());
-  }, [dispatch]);
+    dispatch(fetchCodecList(searchParams));
+  }, [dispatch, searchParams]);
 
   const columnHelper = createColumnHelper<ICodec>();
   const columns = [
@@ -102,6 +104,7 @@ export default function CodecListPage() {
           ))}
         </tbody>
       </table>
+      <Pagination />
     </>
   );
 }
