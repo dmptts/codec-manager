@@ -1,12 +1,64 @@
 import { createGlobalStyle, css } from 'styled-components';
 import { normalize } from 'styled-normalize';
+import MontserratRegularWoff from './fonts/montserrat-regular.woff';
+import MontserratRegularWoff2 from './fonts/montserrat-regular.woff2';
+import MontserratMediumWoff from './fonts/montserrat-medium.woff';
+import MontserratMediumWoff2 from './fonts/montserrat-medium.woff2';
+import MontserratBoldWoff from './fonts/montserrat-bold.woff';
+import MontserratBoldWoff2 from './fonts/montserrat-bold.woff2';
+import ObjectSansHeavyWoff from './fonts/objectsans-heavy.woff';
+import ObjectSansHeavyWoff2 from './fonts/objectsans-heavy.woff2';
 
 export default createGlobalStyle`
   ${normalize}
 
+  @font-face {
+    font-style: normal;
+    font-weight: 400;
+    font-family: "Montserrat";
+    font-display: swap;
+    src:
+      url(${MontserratRegularWoff2}) format("woff2"),
+      url(${MontserratRegularWoff}) format("woff");
+  }
+
+  @font-face {
+    font-style: normal;
+    font-weight: 500;
+    font-family: "Montserrat";
+    font-display: swap;
+    src:
+      url(${MontserratMediumWoff2}) format("woff2"),
+      url(${MontserratMediumWoff}) format("woff");
+  }
+
+  @font-face {
+    font-style: normal;
+    font-weight: 700;
+    font-family: "Montserrat";
+    font-display: swap;
+    src:
+      url(${MontserratBoldWoff2}) format("woff2"),
+      url(${MontserratBoldWoff}) format("woff");
+  }
+
+  @font-face {
+    font-style: normal;
+    font-weight: 900;
+    font-family: "Object Sans";
+    font-display: swap;
+    src:
+      url(${ObjectSansHeavyWoff2}) format("woff2"),
+      url(${ObjectSansHeavyWoff}) format("woff");
+  }
+
   :root {
     --color-brand-violet: #6d13f5;
     --color-brand-orange: #ec5d2f;
+    --color-text: #737373;
+    --color-text-secondary: #252b42;
+    --font-montserrat: "Montserrat", Arial, sans-serif;
+    --font-object-sans: "Object Sans", Arial, sans-serif;
   }
   
   *,
@@ -25,9 +77,9 @@ export default createGlobalStyle`
   html {
     font-style: normal;
     font-weight: 400;
-    font-size: 0.875rem; // 15px
+    font-size: 1rem; // 15px
     line-height: 1.4;
-    font-family: "Inter", Arial, sans-serif;
+    font-family: "Montserrat", Arial, sans-serif;
     color: #000000;
 
     -webkit-font-smoothing: antialiased;

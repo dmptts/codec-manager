@@ -13,6 +13,10 @@ import { useAppSelector } from '../hooks/useAppSelector';
 import { codecsSelectors } from '../store/codecsSlice';
 import { ICodec } from '../types/codec';
 import Pagination from './Pagination';
+import styled from 'styled-components';
+import Container from './Container';
+import { ReactComponent as PenIcon } from './../img/icon-pen.svg';
+import { ReactComponent as BucketIcon } from './../img/icon-bucket.svg';
 
 export default function CodecListPage() {
   const dispatch = useAppDispatch();
@@ -66,25 +70,25 @@ export default function CodecListPage() {
   });
 
   return (
-    <>
+    <Container>
       <h1>Страница списка кодеков</h1>
       <Link to={APP_ROUTES.EditCodec}>Редактирование</Link>
       <Link to={APP_ROUTES.CreateCodec}>Создание</Link>
-      <table>
+      <StyledTable>
         <thead>
           {codecsTable.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <th key={header.id}>
+                <Header key={header.id}>
                   {header.isPlaceholder
                     ? null
                     : flexRender(
                         header.column.columnDef.header,
                         header.getContext()
                       )}
-                </th>
+                </Header>
               ))}
-              <th>Контролы</th>
+              <th></th>
             </tr>
           ))}
         </thead>
@@ -92,19 +96,96 @@ export default function CodecListPage() {
           {codecsTable.getRowModel().rows.map((row) => (
             <tr key={row.id}>
               {row.getVisibleCells().map((cell) => (
-                <td key={cell.id}>
+                <Cell key={cell.id}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
+                </Cell>
               ))}
-              <td>
-                <Link to={`/edit/${row.getValue('id')}`}>Редактировать</Link>
-                <button>Удалить</button>
-              </td>
+              <Cell>
+                <ControlsContainer>
+                  <EditButton to={`/edit/${row.getValue('id')}`}>
+                    <PenIcon />
+                    Редактировать
+                  </EditButton>
+                  <DeleteButton>
+                    <BucketIcon />
+                    Удалить
+                  </DeleteButton>
+                </ControlsContainer>
+              </Cell>
             </tr>
           ))}
         </tbody>
-      </table>
+      </StyledTable>
       <Pagination />
-    </>
+    </Container>
   );
 }
+
+const StyledTable = styled.table`
+  border: 1px solid #ededed;
+  border-collapse: collapse;
+`;
+
+const Header = styled.th`
+  padding: 20px;
+
+  font-family: var(--font-object-sans);
+  font-weight: 900;
+  color: var(--color-text-secondary);
+  text-align: left;
+
+  border: 1px solid #ededed;
+`;
+
+const Cell = styled.td`
+  padding: 8px 20px;
+
+  font-weight: 500;
+  color: var(--color-text-secondary);
+
+  border: 1px solid #ededed;
+`;
+
+const ControlsContainer = styled.div`
+  display: flex;
+  column-gap: 10px;
+`;
+
+const EditButton = styled(Link)`
+  width: 24px;
+  height: 24px;
+
+  font-size: 0;
+
+  svg {
+    width: 24px;
+    height: 24px;
+
+    stroke: var(--color-text-secondary);
+  }
+
+  &:hover svg {
+    stroke: var(--color-brand-orange);
+  }
+`;
+
+const DeleteButton = styled.a`
+  display: block;
+  width: 24px;
+  height: 24px;
+
+  font-size: 0;
+
+  cursor: pointer;
+
+  svg {
+    width: 24px;
+    height: 24px;
+
+    stroke: var(--color-text-secondary);
+  }
+
+  &:hover svg {
+    stroke: var(--color-brand-orange);
+  }
+`;
