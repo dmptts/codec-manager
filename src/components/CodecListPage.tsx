@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import {
   createColumnHelper,
@@ -6,26 +5,18 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { fetchCodecList } from '../api/codecs';
-import { APP_ROUTES } from '../const';
-import { useAppDispatch } from '../hooks/useAppDispatch';
-import { useAppSelector } from '../hooks/useAppSelector';
-import { codecsSelectors } from '../store/codecsSlice';
+
 import { ICodec } from '../types/codec';
 import Pagination from './Pagination';
 import styled from 'styled-components';
 import Container from './Container';
 import { ReactComponent as PenIcon } from './../img/icon-pen.svg';
 import { ReactComponent as BucketIcon } from './../img/icon-bucket.svg';
+import { useGetCodecListQuery } from '../store/codecApi';
 
 export default function CodecListPage() {
-  const dispatch = useAppDispatch();
-  const codecs = useAppSelector(codecsSelectors.selectAll);
   const [searchParams] = useSearchParams();
-
-  useEffect(() => {
-    dispatch(fetchCodecList(searchParams));
-  }, [dispatch, searchParams]);
+  const { data = [] } = useGetCodecListQuery(searchParams.get('page'));
 
   const columnHelper = createColumnHelper<ICodec>();
   const columns = [
@@ -59,7 +50,7 @@ export default function CodecListPage() {
   ];
 
   const codecsTable = useReactTable({
-    data: codecs,
+    data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     state: {
@@ -72,8 +63,6 @@ export default function CodecListPage() {
   return (
     <Container>
       <h1>Страница списка кодеков</h1>
-      <Link to={APP_ROUTES.EditCodec}>Редактирование</Link>
-      <Link to={APP_ROUTES.CreateCodec}>Создание</Link>
       <StyledTable>
         <thead>
           {codecsTable.getHeaderGroups().map((headerGroup) => (
@@ -117,6 +106,7 @@ export default function CodecListPage() {
         </tbody>
       </StyledTable>
       <Pagination />
+      <Link to={'/create'}>Создать новый</Link>
     </Container>
   );
 }

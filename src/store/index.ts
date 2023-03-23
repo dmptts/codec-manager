@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
-import codecReducer from './codecsSlice';
+import { codecApi } from './codecApi';
 
 const store = configureStore({
   reducer: {
-    codecs: codecReducer,
+    [codecApi.reducerPath]: codecApi.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(codecApi.middleware),
 });
 
 export default store;

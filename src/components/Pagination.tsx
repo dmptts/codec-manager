@@ -1,16 +1,19 @@
-import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { useSearchParams } from 'react-router-dom';
 
 export default function Pagination() {
+  // TODO: избавиться от константы и реализовать стор для пагинации при переводе на прод
+  const TOTAL_PAGES = 10;
+
   const [, setSearchParams] = useSearchParams();
 
   return (
     <Root>
       <li>
-        <button onClick={() => setSearchParams({ _page: '1' })}>1</button>
+        <button onClick={() => setSearchParams({ page: '1' })}>1</button>
       </li>
       <li>
-        <button onClick={() => setSearchParams({ _page: '2' })}>2</button>
+        <button onClick={() => setSearchParams({ page: '2' })}>2</button>
       </li>
     </Root>
   );

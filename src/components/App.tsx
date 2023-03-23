@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { APP_ROUTES } from '../const';
+import { APP_ROUTES } from '../config';
 import CodecCreatePage from './CodecCreatePage';
 import CodecEditPage from './CodecEditPage';
 import CodecListPage from './CodecListPage';

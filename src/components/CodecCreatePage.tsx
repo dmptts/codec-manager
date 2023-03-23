@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { APP_ROUTES } from '../const';
+import { APP_ROUTES } from '../config';
 
 export default function CodecCreatePage() {
   return (
