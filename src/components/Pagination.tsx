@@ -5,7 +5,7 @@ import { createRange } from '../utils';
 interface IPaginationProps {
   currentPage: number;
   totalPages: number;
-  onPageChange: Dispatch<number>;
+  onPageChange: (e: React.MouseEvent<HTMLButtonElement>) => void;
   neighboursCount?: number;
 }
 
@@ -49,30 +49,35 @@ export default function Pagination({
     }
   };
 
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    onPageChange(e);
+  };
+
   return (
     <>
       {totalPages > 1 && (
         <Root>
           <li>
             <button
-              onClick={() => onPageChange(currentPage - 1)}
+              value={currentPage - 1}
+              onClick={handleClick}
               disabled={currentPage === 1}
             >
               Предыдущая
             </button>
           </li>
-          {getButtonsArr().map((pageIndex) => {
+          {getButtonsArr().map((pageIndex, i) => {
             if (pageIndex === REDUCTION_PLACEHOLDER) {
               return (
-                <li>
+                <li key={i}>
                   <button disabled>...</button>
                 </li>
               );
             }
 
             return (
-              <li>
-                <button onClick={() => onPageChange(+pageIndex)}>
+              <li key={i}>
+                <button value={pageIndex} onClick={handleClick}>
                   {pageIndex}
                 </button>
               </li>
@@ -80,7 +85,8 @@ export default function Pagination({
           })}
           <li>
             <button
-              onClick={() => onPageChange(currentPage + 1)}
+              value={currentPage + 1}
+              onClick={handleClick}
               disabled={currentPage === totalPages}
             >
               Следующая

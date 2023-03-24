@@ -5,6 +5,7 @@ import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
+  PaginationState,
   useReactTable,
 } from '@tanstack/react-table';
 import { ICodec } from '../types/codec';
@@ -14,16 +15,25 @@ import { useGetCodecListQuery } from '../store/codecApi';
 import { ReactComponent as PenIcon } from './../img/icon-pen.svg';
 import { ReactComponent as BucketIcon } from './../img/icon-bucket.svg';
 import PageJumper from './PageJumper';
+import React from 'react';
 
 export default function CodecListPage() {
   // TODO: избавиться от константы и реализовать стор для пагинации при переводе на прод
   const TOTAL_PAGES = 10;
   const [searchParams] = useSearchParams();
-  const [currentPage, setCurrentPage] = useState(
-    Number(searchParams.get('page'))
-  );
-  const { data = [] } = useGetCodecListQuery(currentPage);
+  const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>({
+    pageIndex: Number(searchParams.get('page')),
+    pageSize: TOTAL_PAGES,
+  });
 
+  const handlePageChange = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setPagination({
+      pageIndex: +e.currentTarget.value,
+      pageSize,
+    });
+  };
+
+  const defaultData: never[] = [];
   const columnHelper = createColumnHelper<ICodec>();
   const columns = [
     columnHelper.accessor('id', {
@@ -56,14 +66,20 @@ export default function CodecListPage() {
   ];
 
   const codecsTable = useReactTable({
-    data,
+    data: useGetCodecListQuery(pageIndex)?.data ?? defaultData,
     columns,
     getCoreRowModel: getCoreRowModel(),
     state: {
+      pagination: {
+        pageIndex,
+        pageSize,
+      },
       columnVisibility: {
         id: false,
       },
     },
+    onPaginationChange: setPagination,
+    manualPagination: true,
   });
 
   return (
@@ -111,14 +127,14 @@ export default function CodecListPage() {
           ))}
         </tbody>
       </StyledTable>
-      {currentPage && (
+      {pageIndex && (
         <>
           <Pagination
-            currentPage={currentPage}
-            onPageChange={setCurrentPage}
+            currentPage={pageIndex}
+            onPageChange={handlePageChange}
             totalPages={TOTAL_PAGES}
           />
-          <PageJumper totalPages={TOTAL_PAGES} onPageChange={setCurrentPage} />
+          {/* <PageJumper totalPages={TOTAL_PAGES} onPageChange={setCurrentPage} />  */}
         </>
       )}
 
