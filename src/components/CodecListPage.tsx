@@ -13,6 +13,7 @@ import Container from './Container';
 import { useGetCodecListQuery } from '../store/codecApi';
 import { ReactComponent as PenIcon } from './../img/icon-pen.svg';
 import { ReactComponent as BucketIcon } from './../img/icon-bucket.svg';
+import PageJumper from './PageJumper';
 
 export default function CodecListPage() {
   // TODO: избавиться от константы и реализовать стор для пагинации при переводе на прод
@@ -111,11 +112,14 @@ export default function CodecListPage() {
         </tbody>
       </StyledTable>
       {currentPage && (
-        <Pagination
-          currentPage={currentPage}
-          onPageChange={setCurrentPage}
-          totalPages={TOTAL_PAGES}
-        />
+        <>
+          <Pagination
+            currentPage={currentPage}
+            onPageChange={setCurrentPage}
+            totalPages={TOTAL_PAGES}
+          />
+          <PageJumper totalPages={TOTAL_PAGES} onPageChange={setCurrentPage} />
+        </>
       )}
 
       <Link to={'/create'}>Создать новый</Link>
