@@ -1,22 +1,27 @@
+import { useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import styled from 'styled-components';
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-
 import { ICodec } from '../types/codec';
 import Pagination from './Pagination';
-import styled from 'styled-components';
 import Container from './Container';
+import { useGetCodecListQuery } from '../store/codecApi';
 import { ReactComponent as PenIcon } from './../img/icon-pen.svg';
 import { ReactComponent as BucketIcon } from './../img/icon-bucket.svg';
-import { useGetCodecListQuery } from '../store/codecApi';
 
 export default function CodecListPage() {
+  // TODO: избавиться от константы и реализовать стор для пагинации при переводе на прод
+  const TOTAL_PAGES = 10;
   const [searchParams] = useSearchParams();
-  const { data = [] } = useGetCodecListQuery(searchParams.get('page'));
+  const [currentPage, setCurrentPage] = useState(
+    Number(searchParams.get('page'))
+  );
+  const { data = [] } = useGetCodecListQuery(currentPage);
 
   const columnHelper = createColumnHelper<ICodec>();
   const columns = [
@@ -105,7 +110,14 @@ export default function CodecListPage() {
           ))}
         </tbody>
       </StyledTable>
-      <Pagination />
+      {currentPage && (
+        <Pagination
+          currentPage={currentPage}
+          onPageChange={setCurrentPage}
+          totalPages={TOTAL_PAGES}
+        />
+      )}
+
       <Link to={'/create'}>Создать новый</Link>
     </Container>
   );
