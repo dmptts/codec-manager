@@ -15,4 +15,4 @@ export const codecApi = createApi({
   }),
 });
 
-export const { useGetCodecListQuery } = codecApi;
+export const { useGetCodecListQuery, useGetCodecQuery } = codecApi;
