@@ -1,11 +1,10 @@
-import { Dispatch } from 'react';
 import styled from 'styled-components';
 import { createRange } from '../utils';
 
 interface IPaginationProps {
   currentPage: number;
   totalPages: number;
-  onPageChange: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onPageChange: (newPageIndex: number) => void;
   neighboursCount?: number;
 }
 
@@ -50,7 +49,7 @@ export default function Pagination({
   };
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    onPageChange(e);
+    onPageChange(+e.currentTarget.value);
   };
 
   return (

@@ -1,8 +1,8 @@
-import React, { useState, Dispatch } from 'react';
+import React, { useState } from 'react';
 
 interface IPageJumberProps {
   totalPages: number;
-  onPageChange: Dispatch<number>;
+  onPageChange: (newPageIndex: number) => void;
 }
 
 export default function PageJumper({
