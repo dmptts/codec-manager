@@ -1,7 +1,8 @@
-import { useFormik } from 'formik';
-import { useEffect } from 'react';
+import { Formik } from 'formik';
 import * as yup from 'yup';
 import { ICodec } from '../types/codec';
+import AppInput from './AppInput';
+import AppSelect from './AppSelect';
 
 interface ICodecFormProps {
   data?: ICodec;
@@ -12,63 +13,57 @@ const validationSchema = yup.object({
   codecSurname: yup.string().min(4).required(),
 });
 
-export default function CodecForm({ data }: ICodecFormProps) {
-  const formik = useFormik({
-    initialValues: {
-      codecName: '',
-      codecSurname: '',
-    },
-    validateOnChange: false,
-    validateOnBlur: false,
-    onSubmit: () => {},
-    validationSchema: validationSchema,
-  });
+const testOptions = [
+  { value: 1, label: 'option 1' },
+  { value: 2, label: 'option 2' },
+  { value: 3, label: 'option 3' },
+];
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLElement>,
-    fieldName: string
-  ) => {
-    formik.handleChange(e);
-    formik.validateField(fieldName);
+export default function CodecForm({ data }: ICodecFormProps) {
+  const initialValues = {
+    codecName: data?.name ?? '',
+    codecSurname: '',
+    codecParent: '',
   };
 
-  useEffect(() => {
-    if (data) {
-      formik.setValues({
-        codecName: data.name,
-        codecSurname: '',
-      });
-    }
-    // eslint-disable-next-line
-  }, [data]); // Линтер хочет добавить инстанс формика в зависимости, а в эффекте изменяется его values, что приводит к зацикливанию
-
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <div>
-        <label htmlFor="codec-name-input">Имя кодека</label>
-        <input
-          type="text"
-          name="codecName"
-          id="codec-name-input"
-          value={formik.values.codecName}
-          onChange={(e) => handleInputChange(e, 'codecName')}
-          onBlur={formik.handleBlur}
-        />
-        {formik.errors.codecName && <div>{formik.errors.codecName}</div>}
-      </div>
-      <div>
-        <label htmlFor="codec-surname-inpu">Фамилия кодека</label>
-        <input
-          type="text"
-          name="codecSurname"
-          id="codec-surname-input"
-          value={formik.values.codecSurname}
-          onChange={(e) => handleInputChange(e, 'codecSurname')}
-          onBlur={formik.handleBlur}
-        />
-        {formik.errors.codecSurname && <div>{formik.errors.codecSurname}</div>}
-      </div>
-      <button type="submit">Создать кодек</button>
-    </form>
+    <Formik
+      initialValues={initialValues}
+      validateOnChange={false}
+      validateOnBlur={false}
+      onSubmit={() => {}}
+      validationSchema={validationSchema}
+      enableReinitialize
+    >
+      {({ handleChange, validateField, handleSubmit }) => {
+        const handleInputChange = (
+          e: React.ChangeEvent<HTMLElement>,
+          fieldName: string
+        ) => {
+          handleChange(e);
+          validateField(fieldName);
+        };
+
+        return (
+          <form onSubmit={handleSubmit}>
+            <AppInput
+              type="text"
+              name="codecName"
+              id="codec-name-input"
+              onChange={(e) => handleInputChange(e, 'codecName')}
+              label="Имя кодека"
+            />
+            <AppInput
+              type="text"
+              name="codecSurname"
+              id="codec-surname-input"
+              onChange={(e) => handleInputChange(e, 'codecSurname')}
+              label="Фамилия кодека"
+            />
+            <AppSelect id="test" name="codecParent" options={testOptions} />
+          </form>
+        );
+      }}
+    </Formik>
   );
 }
