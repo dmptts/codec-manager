@@ -1,3 +1,5 @@
+import { IMethod } from './method';
+
 export interface ICodec {
   id: number;
   extends_id: number;
@@ -6,4 +8,8 @@ export interface ICodec {
   status: null | number;
   created_at: string;
   updated_at: string;
+}
+
+export interface ICodecFull extends ICodec {
+  methods: IMethod[];
 }

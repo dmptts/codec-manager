@@ -1,12 +1,13 @@
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import { useGetCodecListQuery } from '../store/codecApi';
-import { ICodec } from '../types/codec';
+import { ICodecFull } from '../types/codec';
 import AppInput from './AppInput';
 import AppSelect from './AppSelect';
+import CodecMethodList from './CodecMethodList';
 
 interface ICodecFormProps {
-  data?: ICodec;
+  data?: ICodecFull;
 }
 
 const validationSchema = yup.object({
@@ -45,31 +46,40 @@ export default function CodecForm({ data }: ICodecFormProps) {
         };
 
         return (
-          <form onSubmit={handleSubmit}>
-            <AppInput
-              type="text"
-              name="codecName"
-              id="codec-name-field"
-              onChange={(e) => handleInputChange(e, 'codecName')}
-              label="Имя кодека"
-              placeholder="Имя кодека"
-            />
-            <AppSelect
-              name="codecParent"
-              id="codec-parent-field"
-              options={codecParentOptions}
-            />
-            <div>
-              <label htmlFor="codec-description-field">Описание кодека</label>
-              <textarea
-                name="codecDescription"
-                id="codec-description-field"
-                cols={30}
-                rows={10}
-                placeholder="Описание кодека"
+          <>
+            <form onSubmit={handleSubmit}>
+              <AppInput
+                type="text"
+                name="codecName"
+                id="codec-name-field"
+                onChange={(e) => handleInputChange(e, 'codecName')}
+                label="Имя кодека"
+                placeholder="Имя кодека"
               />
-            </div>
-          </form>
+              <AppSelect
+                name="codecParent"
+                id="codec-parent-field"
+                options={codecParentOptions}
+                label="Кодек-родитель"
+                placeholder="Расширяемый кодек"
+              />
+              <div>
+                <label htmlFor="codec-description-field">Описание кодека</label>
+                <textarea
+                  name="codecDescription"
+                  id="codec-description-field"
+                  cols={30}
+                  rows={10}
+                  placeholder="Описание кодека"
+                />
+              </div>
+            </form>
+            <section>
+              <h2>Методы</h2>
+              <CodecMethodList methods={data?.methods} />
+            </section>
+            <button type="submit">Создать кодек</button>
+          </>
         );
       }}
     </Formik>

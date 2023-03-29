@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { BASE_URL } from '../config';
-import { ICodec } from '../types/codec';
+import { ICodec, ICodecFull } from '../types/codec';
+import { IParameterTemplate } from '../types/parameterTemplate';
 
 export const codecApi = createApi({
   reducerPath: 'codecsListApi',
@@ -15,10 +16,20 @@ export const codecApi = createApi({
           pageIndex ? `&_page=${pageIndex}` : ''
         }`,
     }),
-    getCodec: builder.query({
-      query: (id) => `codecs/${id}`,
+    getCodec: builder.query<ICodecFull, number>({
+      query: (id) => `codec/${id}`,
+    }),
+    getMethodList: builder.query({
+      query: () => `methods`,
+    }),
+    getParameterTemplateList: builder.query<IParameterTemplate[], void>({
+      query: () => `parameter-templates`,
     }),
   }),
 });
 
-export const { useGetCodecListQuery, useGetCodecQuery } = codecApi;
+export const {
+  useGetCodecListQuery,
+  useGetCodecQuery,
+  useGetParameterTemplateListQuery,
+} = codecApi;
