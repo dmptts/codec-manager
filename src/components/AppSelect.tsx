@@ -9,7 +9,7 @@ interface ISelectOption {
 
 interface IAppSelect extends LiHTMLAttributes<HTMLLIElement> {
   name: string;
-  options: ISelectOption[];
+  options: ISelectOption[] | undefined;
 }
 
 export default function AppSelect({ name, options }: IAppSelect) {
@@ -26,7 +26,7 @@ export default function AppSelect({ name, options }: IAppSelect) {
 
   useEffect(() => {
     setControlText(
-      options.find((option) => {
+      options?.find((option) => {
         return option.value.toString() === field.value.toString();
       })?.label ?? 'Тест'
     );
@@ -35,22 +35,24 @@ export default function AppSelect({ name, options }: IAppSelect) {
   return (
     <Root>
       <button type="button" {...field} onClick={handleControlClick}>
-        {controlText}
+        {controlText} {!options && 'loading'}
       </button>
-      <OptionList $isOpened={isOpened}>
-        {options.map((option, i) => (
-          <li key={i}>
-            <button
-              type="button"
-              name={name}
-              value={option.value}
-              onClick={handleOptionClick}
-            >
-              {option.label}
-            </button>
-          </li>
-        ))}
-      </OptionList>
+      {options && (
+        <OptionList $isOpened={isOpened}>
+          {options.map((option, i) => (
+            <li key={i}>
+              <button
+                type="button"
+                name={name}
+                value={option.value}
+                onClick={handleOptionClick}
+              >
+                {option.label}
+              </button>
+            </li>
+          ))}
+        </OptionList>
+      )}
     </Root>
   );
 }

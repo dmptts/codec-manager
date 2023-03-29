@@ -1,5 +1,6 @@
 import { Formik } from 'formik';
 import * as yup from 'yup';
+import { useGetCodecListQuery } from '../store/codecApi';
 import { ICodec } from '../types/codec';
 import AppInput from './AppInput';
 import AppSelect from './AppSelect';
@@ -13,18 +14,17 @@ const validationSchema = yup.object({
   codecSurname: yup.string().min(4).required(),
 });
 
-const testOptions = [
-  { value: 1, label: 'option 1' },
-  { value: 2, label: 'option 2' },
-  { value: 3, label: 'option 3' },
-];
-
 export default function CodecForm({ data }: ICodecFormProps) {
   const initialValues = {
     codecName: data?.name ?? '',
-    codecSurname: '',
     codecParent: '',
+    codecDescription: data?.description ?? '',
   };
+
+  const codecParentOptions = useGetCodecListQuery({}).data?.map((codec) => ({
+    value: codec.id,
+    label: codec.name,
+  }));
 
   return (
     <Formik
@@ -49,18 +49,26 @@ export default function CodecForm({ data }: ICodecFormProps) {
             <AppInput
               type="text"
               name="codecName"
-              id="codec-name-input"
+              id="codec-name-field"
               onChange={(e) => handleInputChange(e, 'codecName')}
               label="Имя кодека"
+              placeholder="Имя кодека"
             />
-            <AppInput
-              type="text"
-              name="codecSurname"
-              id="codec-surname-input"
-              onChange={(e) => handleInputChange(e, 'codecSurname')}
-              label="Фамилия кодека"
+            <AppSelect
+              name="codecParent"
+              id="codec-parent-field"
+              options={codecParentOptions}
             />
-            <AppSelect id="test" name="codecParent" options={testOptions} />
+            <div>
+              <label htmlFor="codec-description-field">Описание кодека</label>
+              <textarea
+                name="codecDescription"
+                id="codec-description-field"
+                cols={30}
+                rows={10}
+                placeholder="Описание кодека"
+              />
+            </div>
           </form>
         );
       }}

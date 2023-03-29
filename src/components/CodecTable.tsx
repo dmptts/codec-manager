@@ -23,7 +23,10 @@ export default function CodecTable({
   setPagination,
 }: ICodecTableProps) {
   const { pageIndex, pageSize } = paginationState;
-  const { data, isFetching } = useGetCodecListQuery(pageIndex);
+  const { data, isFetching } = useGetCodecListQuery({
+    pageIndex: pageIndex,
+    pageSize: pageSize,
+  });
   const defaultData: never[] = [];
   const columnHelper = createColumnHelper<ICodec>();
 

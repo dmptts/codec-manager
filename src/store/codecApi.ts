@@ -6,10 +6,16 @@ export const codecApi = createApi({
   reducerPath: 'codecsListApi',
   baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
   endpoints: (builder) => ({
-    getCodecList: builder.query<ICodec[], number>({
-      query: (page) => `codecs?_limit=10${page && `&_page=${page}`}`,
+    getCodecList: builder.query<
+      ICodec[],
+      { pageIndex?: number; pageSize?: number }
+    >({
+      query: ({ pageIndex = null, pageSize = null }) =>
+        `codecs${pageSize ? `?_limit=${pageSize}` : ''}?${
+          pageIndex ? `&_page=${pageIndex}` : ''
+        }`,
     }),
-    getCodec: builder.query<ICodec, number>({
+    getCodec: builder.query({
       query: (id) => `codecs/${id}`,
     }),
   }),
