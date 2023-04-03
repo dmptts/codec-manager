@@ -56,41 +56,45 @@ export default function Pagination({
     <>
       {totalPages > 1 && (
         <Root>
-          <li>
-            <button
+          <Item>
+            <Button
               value={currentPage - 1}
               onClick={handleClick}
               disabled={currentPage === 1}
             >
               Предыдущая
-            </button>
-          </li>
+            </Button>
+          </Item>
           {getButtonsArr().map((pageIndex, i) => {
             if (pageIndex === REDUCTION_PLACEHOLDER) {
               return (
-                <li key={i}>
-                  <button disabled>...</button>
-                </li>
+                <Item key={i}>
+                  <Button disabled>...</Button>
+                </Item>
               );
             }
 
             return (
-              <li key={i}>
-                <button value={pageIndex} onClick={handleClick}>
+              <Item key={i}>
+                <Button
+                  value={pageIndex}
+                  onClick={handleClick}
+                  $isActive={pageIndex === currentPage}
+                >
                   {pageIndex}
-                </button>
-              </li>
+                </Button>
+              </Item>
             );
           })}
-          <li>
-            <button
+          <Item>
+            <Button
               value={currentPage + 1}
               onClick={handleClick}
               disabled={currentPage === totalPages}
             >
               Следующая
-            </button>
-          </li>
+            </Button>
+          </Item>
         </Root>
       )}
     </>
@@ -104,4 +108,46 @@ const Root = styled.ul`
   padding: 0;
 
   list-style: none;
+`;
+
+const Item = styled.li`
+  &:first-child {
+    border-radius: 5px 0 0 5px;
+  }
+
+  &:last-child {
+    border-radius: 0 5px 5px 0;
+  }
+`;
+
+const Button = styled.button<{ $isActive?: boolean }>`
+  min-width: 49px;
+  padding: 14px 20px;
+
+  font-weight: 700;
+
+  background-color: #ffffff;
+  border: none;
+  cursor: pointer;
+
+  &:disabled {
+    color: #bdbdbd;
+
+    background-color: #f3f3f3;
+    cursor: default;
+  }
+
+  &:hover:not(:disabled) {
+    color: #ffffff;
+
+    background-color: ${({ $isActive }) =>
+      $isActive ? 'var(--color-brand-orange)' : 'var(--color-brand-violet)'};
+  }
+
+  ${({ $isActive }) =>
+    $isActive &&
+    `
+    color: #ffffff;
+    background-color: var(--color-brand-orange);
+  `}
 `;

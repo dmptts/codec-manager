@@ -55,8 +55,10 @@ export default createGlobalStyle`
   :root {
     --color-brand-violet: #6d13f5;
     --color-brand-orange: #ec5d2f;
-    --color-text: #737373;
-    --color-text-secondary: #252b42;
+    --color-text: #252b42;
+    --color-text-secondary: #737373;
+    --color-muted: #e9e9e9;
+    --color-error: #ec5d2f;
     --font-montserrat: "Montserrat", Arial, sans-serif;
     --font-object-sans: "Object Sans", Arial, sans-serif;
   }

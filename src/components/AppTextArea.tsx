@@ -1,27 +1,25 @@
-import { ChangeEventHandler, InputHTMLAttributes } from 'react';
 import { useField } from 'formik';
+import { TextareaHTMLAttributes } from 'react';
 import styled from 'styled-components';
 
-interface IAppInputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface IAppTextAreaProps
+  extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   name: string;
-  id: string;
-  onChange?: ChangeEventHandler<HTMLInputElement>;
   label?: string;
 }
 
-export default function AppInput({
+export default function AppTextArea({
   name,
-  id,
   label,
-  onChange,
+  id,
   ...rest
-}: IAppInputProps) {
+}: IAppTextAreaProps) {
   const [field, meta] = useField(name);
 
   return (
     <Root>
       {label && <Label htmlFor={id}>{label}</Label>}
-      <Input {...field} {...rest} onChange={onChange ?? field.onChange} />
+      <TextArea id={id} {...rest} {...field} />
       {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
     </Root>
   );
@@ -46,7 +44,7 @@ const Label = styled.label`
   font-weight: 700;
 `;
 
-const Input = styled.input`
+const TextArea = styled.textarea`
   padding: 11px 21px;
 
   font-size: 0.875rem;

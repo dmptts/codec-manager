@@ -1,10 +1,13 @@
-import { Formik } from 'formik';
+import { Form, Formik } from 'formik';
 import * as yup from 'yup';
 import { useGetCodecListQuery } from '../store/codecApi';
 import { ICodecFull } from '../types/codec';
 import AppInput from './AppInput';
 import AppSelect from './AppSelect';
 import CodecMethodList from './CodecMethodList';
+import AppTextArea from './AppTextArea';
+import styled from 'styled-components';
+import Container from './Container';
 
 interface ICodecFormProps {
   data?: ICodecFull;
@@ -46,8 +49,8 @@ export default function CodecForm({ data }: ICodecFormProps) {
         };
 
         return (
-          <>
-            <form onSubmit={handleSubmit}>
+          <Container>
+            <StyledForm>
               <AppInput
                 type="text"
                 name="codecName"
@@ -63,25 +66,29 @@ export default function CodecForm({ data }: ICodecFormProps) {
                 label="Кодек-родитель"
                 placeholder="Расширяемый кодек"
               />
-              <div>
-                <label htmlFor="codec-description-field">Описание кодека</label>
-                <textarea
-                  name="codecDescription"
-                  id="codec-description-field"
-                  cols={30}
-                  rows={10}
-                  placeholder="Описание кодека"
-                />
-              </div>
-            </form>
+              <AppTextArea
+                name="codecDescription"
+                id="codec-description-field"
+                cols={30}
+                rows={5}
+                placeholder="Описание кодека"
+                label="Описание кодека"
+              />
+            </StyledForm>
             <section>
               <h2>Методы</h2>
               <CodecMethodList methods={data?.methods} />
             </section>
             <button type="submit">Создать кодек</button>
-          </>
+          </Container>
         );
       }}
     </Formik>
   );
 }
+
+const StyledForm = styled(Form)`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 88px;
+`;
